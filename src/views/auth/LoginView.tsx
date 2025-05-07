@@ -6,7 +6,6 @@ import { authenticateUser } from "../../api/AuthAPI";
 import { toast } from "react-toastify";
 export default function LoginView() {
   const navigate = useNavigate()
-
   const initialValues: UserLoginForm = {
     email: '',
     password: '',
@@ -74,7 +73,6 @@ export default function LoginView() {
             value='Iniciar Sesión'
             className="w-full flex justify-center rounded-lg bg-teal-600 px-4 py-3 text-white font-semibold hover:bg-teal-700 transition duration-200"
           />
-           
         </form>
       </div>
     </div>
