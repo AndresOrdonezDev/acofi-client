@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useGetAllConsecutives, useGetUserConsecutives } from "../../hooks/useAuth";
+import { useGetAllConsecutives} from "../../hooks/useAuth";
 import { useState, useMemo, useEffect } from "react";
 
 export default function ListAllConsecutive() {

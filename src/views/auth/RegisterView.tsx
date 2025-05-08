@@ -16,7 +16,7 @@ export default function RegisterView() {
     isAdmin: false
   }
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<CreateAccount>({
+  const { register, handleSubmit,formState: { errors } } = useForm<CreateAccount>({
     defaultValues: initialValues
   });
 

@@ -1,22 +1,10 @@
 import { useState } from "react";
 import ConsecutiveForm from "../components/consecutive/ConsecutiveForm";
-import { toast } from "react-toastify";
+import { handleCopy } from "../hooks/useHandleCopy";
 
 export default function DashboardView() {
   const [consecutiveNumber, setConsecutiveNumber] = useState<string>("");
 
-  const handleCopy = () => {
-    if (consecutiveNumber) {
-      navigator.clipboard.writeText(consecutiveNumber)
-        .then(() => {
-          toast.success("Consecutivo copiado");
-        })
-        .catch((error) => {
-          toast.error("Error al copiar");
-          console.log(error);
-        });
-    }
-  };
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-800 px-4">
       <div className="w-full max-w-[700px] bg-white rounded-2xl shadow-xl p-8 max-lg:p-12">
@@ -34,20 +22,23 @@ export default function DashboardView() {
               {consecutiveNumber}
             </p>
             <div className="space-x-2">
-              <button 
+              <button
                 className="bg-teal-600 text-white p-2 rounded-lg cursor-pointer hover:bg-teal-700 transition"
-                onClick={()=>handleCopy()}
+                onClick={() => handleCopy(consecutiveNumber)}
               >
                 Copiar
               </button>
-              <button 
-                onClick={()=>setConsecutiveNumber('')}
-                className="bg-gray-600 text-white p-2 rounded-lg cursor-pointer hover:bg-gray-700 transition">
+              <button
+                onClick={() => setConsecutiveNumber("")}
+                className="bg-gray-600 text-white p-2 rounded-lg cursor-pointer hover:bg-gray-700 transition"
+              >
                 Cerrar
               </button>
             </div>
           </div>
-        ):<ConsecutiveForm setConsecutiveNumber={setConsecutiveNumber}/>}
+        ) : (
+          <ConsecutiveForm setConsecutiveNumber={setConsecutiveNumber} />
+        )}
       </div>
     </div>
   );
