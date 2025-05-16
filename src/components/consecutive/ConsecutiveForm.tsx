@@ -3,6 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import type { RequestConsecutiveForm } from "../../types";
 import { requestConsecutive } from "../../api/ConsecutiveAPI";
+import Spinnier from "../Spinner";
 
 export const offices: { [key: string]: string } = {
   GFP: "PENSIONES",
@@ -32,7 +33,7 @@ export default function ConsecutiveForm({setConsecutiveNumber}:ConsecutiveFormPr
     reset,
   } = useForm({ defaultValues: initialValues });
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: requestConsecutive,
     onError: (error) => {
       toast.error(error.message);
@@ -139,13 +140,14 @@ export default function ConsecutiveForm({setConsecutiveNumber}:ConsecutiveFormPr
         )}
       </div>
 
-      {/* Botón */}
-      <button
+     
+      {!isPending ?(<button
         type="submit"
         className="w-full flex justify-center rounded-lg bg-teal-600 px-4 py-3 text-white font-semibold hover:bg-teal-700 transition duration-200 disabled:bg-teal-400"
       >
         Generar consecutivo
-      </button>
+      </button>)
+      :<Spinnier/>}
     </form>
   );
 }

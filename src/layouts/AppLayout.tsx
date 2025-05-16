@@ -4,6 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Outlet, Link } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
+import Spinnier from "../components/Spinner";
 
 
 export default function AppLayout() {
@@ -22,7 +23,7 @@ export default function AppLayout() {
 
   const { data, isError, isLoading } = useAuth();
   
-  if (isLoading) return <p>Cargando...</p>;
+  if (isLoading) return <Spinnier/>;
 
   if (isError) {
     return <Navigate to={"/auth/login"} />;

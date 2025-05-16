@@ -1,10 +1,51 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ACofi - Administrador de consecutivos de oficina</title>
+    <style>
+      /* Slate (usado en bg-slate-800 y textos) */
+      .bg-slate-800 {
+        background-color: #1e293b !important;
+      }
+      .text-gray-800 {
+        color: #1f2937 !important;
+      }
+
+      /* Gray usados en botones */
+      .bg-gray-200 {
+        background-color: #e5e7eb !important;
+      }
+      .bg-gray-600 {
+        background-color: #4b5563 !important;
+      }
+      .hover\:bg-gray-700:hover {
+        background-color: #374151 !important;
+      }
+
+      /* Teal usados en botón de copiar */
+      .bg-teal-600 {
+        background-color: #0d9488 !important;
+      }
+      .hover\:bg-teal-700:hover {
+        background-color: #0f766e !important;
+      }
+
+      /* Otros colores por si acaso */
+      .text-white {
+        color: #ffffff !important;
+      }
+      .bg-white {
+        background-color: #ffffff !important;
+      }
+
+      /* Tailwind usa nombres con `:` para variantes (hover, etc) que en CSS hay que escapar con `\:` */
+      .hover\:bg-teal-700:hover {
+        background-color: #0f766e !important;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
