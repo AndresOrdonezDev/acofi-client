@@ -3,12 +3,11 @@ import api from '../lib/axios'
 import { userSchema, type CreateAccount, type UserLoginForm } from '../types'
 
 export async function authenticateUser(formData:UserLoginForm){     
-    try {
+    try {        
         const {data} = await api.post<string>("/auth/login",formData)
         localStorage.setItem('token_acofi',data)      
         return data
     } catch (error) {
-        
         if (isAxiosError(error) && error.response) {
             throw new Error(error.response.data)
         }

@@ -12,8 +12,8 @@ export async function requestConsecutive(formData:RequestConsecutiveForm){
         }
         throw error;
     }
-
 }
+
 export async function getUserConsecutive(){
     try {
         const {data} = await api.get("/consecutive/list")
@@ -34,10 +34,10 @@ export async function getUserConsecutive(){
 export async function getAllConsecutive(){
     try {
         const {data} = await api.get("/consecutive")
-        console.log(data);
+
         const response = userConsecutiveArraySchema.safeParse(data)
         if(response.success){
-            return data
+            return response.data
         }
         
     } catch (error) {

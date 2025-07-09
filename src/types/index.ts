@@ -37,7 +37,7 @@ const authSchema = z.object({
     email: z.string().email(),
     password: z.string(),
     isAdmin:z.boolean(),
-    password_confirmation: z.string(),
+    password_confirmation: z.string(), 
 })
 
 type Auth = z.infer<typeof authSchema>
