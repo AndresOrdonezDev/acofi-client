@@ -1,4 +1,8 @@
-export default function Spinnier() {
+type SpinnerProps = {
+   marginTop :string
+}
+export default function Spinnier({marginTop}:SpinnerProps) {
+
   return (
     <>
       <style>{`
@@ -6,7 +10,7 @@ export default function Spinnier() {
           width: 40px;
           height: 40px;
           position: relative;
-          margin: 100px auto;
+          margin: ${marginTop} auto;
         }
 
         .double-bounce1, .double-bounce2 {

@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import type { RequestConsecutiveForm } from "../../types";
-import { requestConsecutive } from "../../api/ConsecutiveAPI";
+import type { UserConsecutiveById } from "../../types";
+import { updateConsecutive } from "../../api/ConsecutiveAPI";
 import Spinnier from "../Spinner";
 
 export const offices: { [key: string]: string } = {
@@ -15,34 +15,88 @@ export const offices: { [key: string]: string } = {
 };
 
 type ConsecutiveFormProps = {
-    setConsecutiveNumber: React.Dispatch<React.SetStateAction<string>>
-}
+  dataEdit: UserConsecutiveById;
+  onClose: () => void;
+};
 
-export default function ConsecutiveForm({setConsecutiveNumber}:ConsecutiveFormProps) {
-  const initialValues: RequestConsecutiveForm = {
-    acronym: "",
-    addressee: "",
-    topic: "",
-    requestedBy: "",
+export default function EditConsecutiveForm({
+  dataEdit,
+  onClose,
+}: ConsecutiveFormProps) {
+  const initialValues: UserConsecutiveById & { acronym: string } = {
+    ...dataEdit,
+    acronym: extractAcronym(dataEdit.consecutive), // <== añadimos este campo al form
   };
-
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm({ defaultValues: initialValues });
-
+  const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
-    mutationFn: requestConsecutive,
+    mutationFn: updateConsecutive,
     onError: (error) => {
       toast.error(error.message);
       reset;
     },
-    onSuccess: (data) => setConsecutiveNumber(data),
+    onSuccess: (data) => {
+      toast.success(data),
+        queryClient.invalidateQueries({ queryKey: ["userConsecutives"] });
+      onClose();
+    },
   });
 
-  const handleRequest = (formData: RequestConsecutiveForm) => mutate(formData);
+  const handleRequest = (
+    formData: UserConsecutiveById & { acronym: string }
+  ) => {
+    const { year, number } = extractConsecutiveParts(dataEdit.consecutive);
+    const newConsecutive = generateConsecutive(formData.acronym, year, number);
+
+    const updatedData = {
+      ...formData,
+      consecutive: newConsecutive,
+    };
+
+    mutate(updatedData);
+  };
+
+  function extractAcronym(consecutive: string): string {
+    const parts = consecutive.split("-");
+    // Caso especial: solo hay 3 partes => SHD-2025-00027
+    if (parts.length === 3) {
+      return "SHD";
+    }
+    // Caso normal: SHD-GFP-2025-00015
+    return parts.length >= 4 ? parts[1] : "";
+  }
+
+  function extractConsecutiveParts(consecutive: string) {
+    const parts = consecutive.split("-");
+    if (parts.length === 3) {
+      // Caso: SHD-2025-00015
+      return {
+        year: parts[1],
+        number: parts[2],
+      };
+    } else if (parts.length === 4) {
+      // Caso: SHD-GFP-2025-00015
+      return {
+        year: parts[2],
+        number: parts[3],
+      };
+    }
+    return { year: "", number: "" };
+  }
+  function generateConsecutive(
+    acronym: string,
+    year: string,
+    number: string
+  ): string {
+    return acronym === "SHD"
+      ? `SHD-${year}-${number}`
+      : `SHD-${acronym}-${year}-${number}`;
+  }
 
   return (
     <form
@@ -140,14 +194,16 @@ export default function ConsecutiveForm({setConsecutiveNumber}:ConsecutiveFormPr
         )}
       </div>
 
-     
-      {!isPending ?(<button
-        type="submit"
-        className="w-full flex justify-center rounded-lg bg-teal-600 px-4 py-3 text-white font-semibold hover:bg-teal-700 transition duration-200 disabled:bg-teal-400"
-      >
-        Generar consecutivo
-      </button>)
-      :<Spinnier marginTop="50px"/>}
+      {!isPending ? (
+        <button
+          type="submit"
+          className="w-full flex justify-center rounded-lg bg-teal-600 px-4 py-3 text-white font-semibold hover:bg-teal-700 transition duration-200 disabled:bg-teal-400"
+        >
+          Actualizar consecutivo
+        </button>
+      ) : (
+        <Spinnier marginTop="0" />
+      )}
     </form>
   );
 }

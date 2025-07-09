@@ -23,7 +23,7 @@ export default function AppLayout() {
 
   const { data, isError, isLoading } = useAuth();
   
-  if (isLoading) return <Spinnier/>;
+  if (isLoading) return <Spinnier marginTop="150px"/>;
 
   if (isError) {
     return <Navigate to={"/auth/login"} />;

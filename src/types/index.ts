@@ -8,6 +8,7 @@ const  consecutiveSchema = z.object({
     requestedBy: z.string(),
 })
 
+
 type Consecutive = z.infer<typeof consecutiveSchema>
 export type RequestConsecutiveForm = Pick<Consecutive,'acronym'|'addressee'|'requestedBy'|'topic'>
 
@@ -27,10 +28,17 @@ export const userConsecutiveSchema = z.object({
       email: z.string().email()
     })
   });
-
+export const userConsecutiveByIdSchema = userConsecutiveSchema.pick({
+    id:true,
+    consecutive:true,
+    addressee:true,
+    topic:true,
+    requestedBy:true,
+    createdAt:true,
+})
 export type userConsecutive = z.infer<typeof userConsecutiveSchema>
 export const userConsecutiveArraySchema = z.array(userConsecutiveSchema);
-
+export type UserConsecutiveById = Pick<userConsecutive,'id'|'consecutive'|'addressee'|'topic'|'requestedBy'|'createdAt'>
 //** Auth */
 const authSchema = z.object({
     username: z.string(),
